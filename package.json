@@ -9,9 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@syncfusion/ej2-pdfviewer": "^31.2.15",
     "next": "16.0.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-pdf": "^10.2.0",
     "toast": "^0.5.4"
   },
   "devDependencies": {
