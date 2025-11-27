@@ -366,7 +366,7 @@ NO=1/(sqrt(2.0*enb. CellRefP*double(info.Nfft))*SNR);`
 
   const copySync = ()=>{
     navigator.clipboard
-    .writeText(syncStr)
+    .writeText(syncstr)
     .then(()=>{
     })
     .catch((err)=>{
