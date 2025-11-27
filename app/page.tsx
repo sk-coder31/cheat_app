@@ -474,7 +474,6 @@ NO=1/(sqrt(2.0*enb. CellRefP*double(info.Nfft))*SNR);`
             >
               Copy Synchronization
             </button>
-<<<<<<< HEAD
             <div className="flex gap-2 items-center">
               <select
                 value={pdfFile}
@@ -501,9 +500,6 @@ NO=1/(sqrt(2.0*enb. CellRefP*double(info.Nfft))*SNR);`
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white w-full h-full max-w-5xl max-h-screen rounded-lg shadow-lg flex flex-col">
             <PDFViewer file={pdfFile} onClose={() => setShowPdf(false)} />
-=======
-            
->>>>>>> 808de32e861ccd85965e9a53de1b73825ea58d39
           </div>
         </div>
       )}
