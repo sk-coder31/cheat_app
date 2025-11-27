@@ -298,6 +298,81 @@ figure;
 stem(qpsk_demodulated_data,'rx'); 
 grid on;xlabel('Data Points');ylabel('Amplitude');title('Received Data "X"')`
 
+  const syncstr = `
+  enb.NDLRB = 15; % Number of resource blocks 
+enb.CellRefP1:% One transmit antenna port 
+enb.NCellID=10; % Cell ID 
+enb.CyclicPrefix= 'Normal'; % Normal cyclic prefix 
+enb.DuplexMode = 'FDD'; % FDD 
+SNRdB=22;% Desired SNR in dB 
+SNR=10^(SNRdB/20); % Linear SNR 
+mg('default'); % Configure random number generators 
+cfg.Seed=1; % Channel seed 
+cfg.NRxAnts = 1; % 1 receive antenna 
+cfg. DelayProfile = 'EVA'; % EVA delay spread 
+cfg DopplerFreq=120:% 120Hz Doppler frequency 
+cfg.MIMOCorrelation 'Low; % Low (no) MIMO correlation. 
+cfg.InitTime = 0; % Initialize at time zero 
+cfg.NTerms 16, % Oscillators used in fading model 
+cfg.ModelType 'GMEDS'; % Rayleigh fading model type 
+cfg.InitPhase 'Random'; % Random initial phases 
+cfg.NormalizePathGains = 'On'; % Normalize delay profile power 
+cfg.NormalizeTxAnta On'; % Normalize for transmit antennas 
+cec.PilotAverage = "UserDefined'; % Pilot averaging method 
+cec.Freq Window = 9; % Frequency averaging window in REs 
+cec.TimeWindow=9; % Time averaging window in REs gridsize = 
+IteDLResourceGridSize(enb); 
+K=gridaize(1); % Number of subearriers 
+L=gridsize(2); % Number of OFDM symbols in 
+one subframeP= gridsize(3); % Number of transmit antenna ports  
+txGrid=[]; 
+%Number of bits needed is size of resource grid (K*L*P) number of hits per symbol (2 for QPSK) 
+numberOfBits=K*L*P*2; 
+% Create random bit stream 
+inputBits =randi([0 1], numberOfBits, 1); 
+% Modulate input bits 
+inputSym= IteSymbolModulate(inputBits, 'QPSK'); 
+% For all subframes within the framefor 
+sf = 0:10 
+% Set subframe number 
+enb.NSubframe = mod(sf,10); 
+% Generate empty subframe subframe = 
+IteDLResourceGrid(enb); 
+% Map input symbols to grid 
+subframe(:) = inputSym; 
+% Generate synchronizing signals 
+pssSym= ltePSS(enb); 
+sssSym =IteSSS(enb);  
+pssInd= ItePSSIndices(enb); 
+sssInd = IteSSSIndices(enb); 
+% Map synchronizing signals to the grid 
+subframe(pssInd) = pssSym; 
+subframe(sasind) = sssSym; 
+%Generate cell specific reference 
+signal symbols and indices cellRsSym =lteCellRS(enb); 
+cellRsInd = IteCellRSIndices(enb); 
+% Map cell specific reference signal to grid 
+subframe(cellRsInd) = cellRsSym; 
+% Append subframe to grid to be transmitted 
+txGrid = [txGrid subframe]; %#ok 
+end 
+[txWaveform,info] = IteOFDMModulate(enb,txGrid); 
+txGrid = txGrid(:,1:140); 
+cfg.Sampling Rate = info.Sampling Rate; 
+% Pass data through the fading channel model 
+rx Waveform = IteFadingChannel(cfg,txWaveform); 
+% Calculate noise gain 
+NO=1/(sqrt(2.0*enb. CellRefP*double(info.Nfft))*SNR);`
+
+  const copySync = ()=>{
+    navigator.clipboard
+    .writeText(syncStr)
+    .then(()=>{
+    })
+    .catch((err)=>{
+    });
+  }
+
   const copyPulseShaping = () => {
     navigator.clipboard
       .writeText(pulseShapingstr)
@@ -389,6 +464,13 @@ grid on;xlabel('Data Points');ylabel('Amplitude');title('Received Data "X"')`
             >
               Copy Signal Transmission and Reception
             </button>
+            <button
+              onClick={copySync}
+              className="min-w-[220px] rounded-md bg-white/80 px-4 py-2 text-sm font-medium text-black shadow hover:bg-white"
+            >
+              Copy Synchronization
+            </button>
+            
           </div>
         </div>
       )}
