@@ -482,6 +482,7 @@ NO=1/(sqrt(2.0*enb. CellRefP*double(info.Nfft))*SNR);`
               >
                 <option value="/pdflab.pdf">pdflab.pdf</option>
                 <option value="/RF%20lab.pdf">RF lab.pdf</option>
+                <option value="/AI%20Lab.pdf">AI LAB RECORDS</option>
               </select>
               <button
                 onClick={() => { setShowPdf(true); }}
